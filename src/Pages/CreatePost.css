@@ -11,19 +11,20 @@
 .create-post-container {
   max-width: 800px;
   margin: 2rem auto;
-  padding: 0.1.5rem 4rem;
-}
-form-header {
-  margin-bottom: 2.5rem;
-  text-align: center;
+  padding: 0 1.5rem 2rem;
 }
 
 .form-header {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.form-header h1 {
   font-size: 2.5rem;
   font-weight: 800;
   color: #1e293b;
   margin-bottom: 0.5rem;
-  background: linear-gradient(135deg, #636661, #a855f7);
+  background: linear-gradient(135deg, #6366f1, #a855f7);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -39,12 +40,16 @@ form-header {
   border-radius: 24px;
   padding: 2.5rem;
   box-shadow:
-    0 10px 25px -5px rgba(0, 0, 0.05),
+    0 10px 25px -5px rgba(0, 0, 0, 0.05),
     0 8px 10px -6px rgba(0, 0, 0, 0.05);
   border: 1px solid #f1f5f9;
 }
 
-.from-group label {
+.form-group {
+  margin-bottom: 1.75rem;
+}
+
+.form-group label {
   display: block;
   font-size: 0.95rem;
   font-weight: 600;
@@ -64,9 +69,10 @@ form-header {
   color: #94a3b8;
   font-size: 1.2rem;
 }
+
 .form-control {
   width: 100%;
-  padding: 0.87rem 1rem 0.875rem 2.75rem;
+  padding: 0.875rem 1rem 0.875rem 2.75rem;
   border: 2px solid #e2e8f0;
   border-radius: 12px;
   font-size: 1rem;
@@ -74,17 +80,30 @@ form-header {
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   background-color: #fdfdfd;
 }
+
 .form-control:focus {
   outline: none;
   border-color: #6366f1;
-  box-shadow: 0 0 0 4px rgba(99 102 241 0.1);
+  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
   background-color: #fff;
 }
+
 textarea.form-control {
   min-height: 150px;
   resize: vertical;
   padding-left: 1rem;
 }
+input[type="text"].form-control {
+  padding-left: 2.75rem;
+}
+input[type="author"].form-control {
+  padding-left: 2.75rem;
+}
+input[type="url"].form-control {
+  padding-left: 2.75rem;
+}
+
+
 .image-source-tabs {
   display: flex;
   gap: 1rem;
@@ -93,13 +112,14 @@ textarea.form-control {
   padding: 0.4rem;
   border-radius: 12px;
 }
+
 .tab-btn {
   flex: 1;
   padding: 0.6rem;
   border: none;
   border-radius: 8px;
   font-weight: 600;
-  font-size: 0.87rem;
+  font-size: 0.875rem;
   cursor: pointer;
   transition: all 0.2s;
   background: transparent;
@@ -108,6 +128,12 @@ textarea.form-control {
 
 .tab-btn-active {
   background: #fff;
+  color: #6366f1;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.image-upload-area {
+  border: 3px dashed #e2e8f0;
   border-radius: 16px;
   padding: 2rem;
   text-align: center;
@@ -131,6 +157,7 @@ textarea.form-control {
   color: #000000;
   font-weight: 500;
 }
+
 .image-preview-container {
   margin-top: 1.5rem;
   position: relative;
@@ -138,6 +165,7 @@ textarea.form-control {
   overflow: hidden;
   aspect-ratio: 16/9;
 }
+
 .image-preview {
   width: 100%;
   height: 100%;
@@ -158,16 +186,18 @@ textarea.form-control {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.2s;
   z-index: 10;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1) 0 2px 4px -1px
-    rgba(0, 0, 0, 0.06);
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
 .remove-image-btn:hover {
   background: #dc2626;
   transform: scale(1.1);
 }
+
 .remove-image-btn svg {
   font-size: 14px;
 }
@@ -178,29 +208,29 @@ textarea.form-control {
   color: white;
   border: none;
   border-radius: 12px;
-  font-size: 1.1rem;
+  font-size: 1rem;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.3s;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
+  gap: 0.75rem;
 }
-
 .submit-btn:hover {
-  transform: translate(-2px);
-  box-shadow: 0 10px 20px -5px rgba(99, 102, 241, 0, 4);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px -5px rgba(99, 102, 241, 0.4);
 }
-
 .submit-btn:active {
   transform: translateY(0);
 }
+
 .form-actions-row {
   display: flex;
   gap: 1rem;
   margin-top: 2rem;
 }
+
 .form-actions-row .submit-btn {
   margin-top: 0;
   flex: 2;
@@ -212,10 +242,10 @@ textarea.form-control {
   color: #475569;
   border: 2px solid #e2e8f0;
   border-radius: 12px;
-  font-size: 1rem;
   font-weight: 700;
+  font-size: 1rem;
   cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.4, , 0.2, 1);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -226,21 +256,19 @@ textarea.form-control {
   color: #1e293b;
   border-color: #cbd5e1;
 }
-
 .cancel-btn:active {
   transform: translateY(1px);
 }
-@media (max.width: 400px) {
+
+@media (max-width: 480px) {
   .form-actions-row {
     flex-direction: column;
   }
 }
-
 @media (max-width: 640px) {
   .create-post-container {
     margin: 1rem auto;
   }
-
   .post-form-card {
     padding: 1.5rem;
   }
@@ -248,4 +276,5 @@ textarea.form-control {
   .form-header h1 {
     font-size: 1.8rem;
   }
+  
 }

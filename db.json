@@ -1,30 +1,26 @@
-
 {
   "posts": [
     {
-      "id": 1,
-      "title": "First Post",
-      "description": "Sample description",
-      "image": "https://picsum.photos/400",
-      "author": "Admin",
-      "date": "Recent"
-    },
-  
-    {
-      "id": 1,
-      "title": "Third Post",
-      "description": "Sample description",
-      "image": "https://picsum.photos/400",
-      "author": "user",
-      "date": "Recent"
+      "id": "1771424530212",
+      "title": "mahek",
+      "author": "manshiparmar94",
+      "description": "hyyy",
+      "image": "https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=500",
+      "userId": 1771424530211,
+      "userEmail": "manshiparmar94@gmail.com",
+      "createdAt": "2026-02-18T14:22:10.211Z",
+      "date": "Feb 18, 2026"
     },
     {
-      "id": 1,
-      "title": "fourth Post",
-      "description": "Sample description",
-      "image": "https://picsum.photos/400",
-      "author": "user",
-      "date": "Recent"
+      "id": "1771424820520",
+      "title": "manshi",
+      "author": "manshiparmar94",
+      "description": "heloo",
+      "image": "https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=500",
+      "userId": 1771424820519,
+      "userEmail": "manshiparmar94@gmail.com",
+      "createdAt": "2026-02-18T14:27:00.519Z",
+      "date": "Feb 18, 2026"
     }
   ]
 }
