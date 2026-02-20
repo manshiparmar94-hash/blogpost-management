@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { FaPlus } from "react-icons/fa";
+import { FaPlus, FaStar } from "react-icons/fa";
 import { MdDelete, MdEdit } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -10,8 +10,8 @@ const Dashboard = () => {
   const navigate = useNavigate();
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [favorites, setFavorites] = useState([]);
 
-  // ================= FETCH POSTS =================
   const fetchPosts = async () => {
     try {
       setLoading(true);
@@ -28,39 +28,79 @@ const Dashboard = () => {
 
   useEffect(() => {
     fetchPosts();
+
+    const storedFavs =
+      JSON.parse(localStorage.getItem("favorites")) || [];
+    setFavorites(storedFavs.map((item) => item.id));
   }, []);
 
-  // ================= LOGOUT =================
+  const toggleFavorite = (post) => {
+    let storedFavs =
+      JSON.parse(localStorage.getItem("favorites")) || [];
+
+    const exists = storedFavs.find(
+      (item) => item.id === post.id
+    );
+
+    if (exists) {
+      storedFavs = storedFavs.filter(
+        (item) => item.id !== post.id
+      );
+      toast.info("Removed from favorites");
+    } else {
+      storedFavs.push(post);
+      toast.success("Added to favorites");
+    }
+
+    localStorage.setItem(
+      "favorites",
+      JSON.stringify(storedFavs)
+    );
+
+    setFavorites(storedFavs.map((item) => item.id));
+  };
+
   const handleLogout = () => {
     localStorage.removeItem("loginData");
     toast.success("Logged out successfully");
     navigate("/login");
   };
 
-  // ================= DELETE POST =================
+  const handleCreatePost = () => {
+    navigate("/create-post");
+  };
+
   const handleDeletePost = async (id) => {
     try {
-      await fetch(`http://localhost:3000/posts/${id}`, {
-        method: "DELETE",
-      });
+      const response = await fetch(
+        `http://localhost:3000/posts/${id}`,
+        { method: "DELETE" }
+      );
 
-      setPosts(posts.filter((post) => post.id !== id));
+      if (!response.ok) {
+        throw new Error(`Status: ${response.status}`);
+      }
+
+      setPosts((prevPosts) =>
+        prevPosts.filter((post) => post.id !== id)
+      );
+
       toast.success("Post deleted successfully");
     } catch (error) {
-      console.error("Error deleting post:", error);
+      console.error("Delete Error:", error);
       toast.error("Failed to delete post");
     }
   };
 
-  // ================= CURRENT USER =================
-  const loginData = JSON.parse(localStorage.getItem("loginData") || "{}");
-  const currentUser = loginData?.email?.split("@")[0] || "User";
+  const loginData =
+    JSON.parse(localStorage.getItem("loginData")) || {};
+  const currentUser = loginData?.username || "User";
 
-  // ================= STATS =================
   const totalPosts = posts.length;
   const userPosts = posts.filter(
     (post) =>
-      post.author?.toLowerCase() === currentUser.toLowerCase()
+      post.author?.toLowerCase() ===
+      currentUser.toLowerCase()
   ).length;
   const communityPosts = totalPosts - userPosts;
 
@@ -69,44 +109,49 @@ const Dashboard = () => {
       <Navbar onLogout={handleLogout} />
 
       <main className="dashboard-main">
-
-        {/* Welcome */}
         <div className="dashboard-welcome">
-          <div className="welcome-text">
-            <h1>Welcome to Your Dashboard, {currentUser}!</h1>
-            <p>
-              Manage your posts and connect with your audience.
-            </p>
-          </div>
+          <h1>
+            Welcome to Your Dashboard, {currentUser}!
+          </h1>
+          <p>
+            Manage your posts, track engagement, and
+            connect with your audience.
+          </p>
         </div>
 
         {/* Stats */}
         <div className="dashboard-stats-overview">
           <div className="dash-card">
             <h3>Total Posts</h3>
-            <span className="dash-number">{totalPosts}</span>
+            <span className="dash-number">
+              {totalPosts}
+            </span>
           </div>
 
           <div className="dash-card">
             <h3>Your Stories</h3>
-            <span className="dash-number">{userPosts}</span>
+            <span className="dash-number">
+              {userPosts}
+            </span>
           </div>
 
           <div className="dash-card">
             <h3>Community Posts</h3>
-            <span className="dash-number">{communityPosts}</span>
+            <span className="dash-number">
+              {communityPosts}
+            </span>
           </div>
         </div>
 
-        {/* Posts Section */}
+        {/* Posts */}
         <section className="posts-section">
           <div className="section-header">
-            <h2 className="section-title">Recent Feed</h2>
-
-            {/* ✅ NEW POST BUTTON WORKING */}
+            <h2 className="section-title">
+              Recent Feed
+            </h2>
             <button
               className="create-shortcut-btn"
-              onClick={() => navigate("/create-post")}
+              onClick={handleCreatePost}
             >
               <FaPlus /> New Post
             </button>
@@ -114,10 +159,15 @@ const Dashboard = () => {
 
           <div className="posts-grid">
             {loading ? (
-              <div className="loading-state">Loading posts...</div>
+              <div className="loading-state">
+                Loading posts...
+              </div>
             ) : posts.length > 0 ? (
               posts.map((post) => (
-                <div className="post-card" key={post.id}>
+                <div
+                  className="post-card"
+                  key={post.id}
+                >
                   <div className="post-image-container">
                     <img
                       src={
@@ -128,46 +178,45 @@ const Dashboard = () => {
                       className="post-card-image"
                     />
 
-                    <div className="post-actions">
+                    {/* Favorite Button */}
+                    <button
+                      className={`favorite-btn ${
+                        favorites.includes(post.id)
+                          ? "active"
+                          : ""
+                      }`}
+                      onClick={() =>
+                        toggleFavorite(post)
+                      }
+                    >
+                      <FaStar size={20} />
+                    </button>
 
-                      {/* EDIT */}
+                    {/* Edit & Delete */}
+                    <div className="post-actions">
                       <button
                         className="action-btn edit-btn"
-                        title="Edit Post"
                         onClick={() =>
-                          navigate(`/edit-post/${post.id}`)
+                          navigate(
+                            `/create-post/${post.id}`
+                          )
                         }
                       >
-                        <MdEdit size={22} color="#ffffff" />
+                        <MdEdit size={20} />
                       </button>
 
-                      {/* DELETE */}
                       <button
                         className="action-btn delete-btn"
-                        title="Delete Post"
                         onClick={() =>
                           handleDeletePost(post.id)
                         }
                       >
-                        <MdDelete size={20} color="#ffffff" />
+                        <MdDelete size={20} />
                       </button>
-
                     </div>
                   </div>
 
                   <div className="post-card-content">
-                    <div className="post-meta">
-                      <span className="post-author">
-                        By {post.author || "Anonymous"}
-                      </span>
-                      <span className="post-date">
-                        {post.date ||
-                          new Date(
-                            post.createdAt || Date.now()
-                          ).toLocaleDateString()}
-                      </span>
-                    </div>
-
                     <h3 className="post-card-title">
                       {post.title}
                     </h3>
@@ -178,7 +227,14 @@ const Dashboard = () => {
                         post.excerpt}
                     </p>
 
-                    <button onClick={() => navigate(`/post/${post.id}`)}>
+                    <button
+                      className="read-more-btn"
+                      onClick={() =>
+                        navigate(
+                          `/PostDetails/${post.id}`
+                        )
+                      }
+                    >
                       Read More
                     </button>
                   </div>
@@ -186,19 +242,14 @@ const Dashboard = () => {
               ))
             ) : (
               <div className="no-posts">
-                <p>No posts yet. Be the first to create one!</p>
-
-                <button
-                  className="create-shortcut-btn"
-                  onClick={() => navigate("/create-post")}
-                >
-                  Create First Post
-                </button>
+                <p>
+                  No posts yet. Be the first to create
+                  a post!
+                </p>
               </div>
             )}
           </div>
         </section>
-
       </main>
     </div>
   );

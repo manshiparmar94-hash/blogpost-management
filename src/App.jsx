@@ -3,7 +3,6 @@ import {
   Navigate,
   RouterProvider,
 } from "react-router-dom";
-
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -14,14 +13,13 @@ import Register from "./Pages/Register";
 import CreatePost from "./Pages/CreatePost";
 import PostDetails from "./Pages/PostDetails";
 import Analytics from "./Pages/Analytics";
+import Favorites from "./Pages/Favorites";
 
 const DefaultRoute = () => {
   const loginData = JSON.parse(localStorage.getItem("loginData"));
-
   if (loginData) {
     return <Navigate to="/dashboard" replace />;
   }
-
   return <Navigate to="/register" replace />;
 };
 
@@ -33,11 +31,19 @@ function App() {
     },
     {
       path: "/login",
-      element: <Login />,
+      element: (
+        <AuthGuard required={false}>
+          <Login />
+        </AuthGuard>
+      ),
     },
     {
       path: "/register",
-      element: <Register />,
+      element: (
+        <AuthGuard required={false}>
+          <Register />
+        </AuthGuard>
+      ),
     },
     {
       path: "/dashboard",
@@ -55,24 +61,37 @@ function App() {
         </AuthGuard>
       ),
     },
-
-    // ✅ correct post details route
     {
-      path: "/post/:id",
+      path: "/create-post/:id",
       element: (
         <AuthGuard required={true}>
-          <PostDetails />
+          <CreatePost />
         </AuthGuard>
       ),
     },
-
     {
-      path: "/analytics",
-      element: (
+      path: "PostDetails/:id",
+      element:(
         <AuthGuard required={true}>
-          <Analytics />
+          <PostDetails/>
         </AuthGuard>
-      ),
+      )
+    },
+    {
+      path: "Analytics",
+      element:(
+        <AuthGuard required={true}>
+          <Analytics/>
+        </AuthGuard>
+      )
+    },
+    {
+      path: "favorites",
+      element:(
+        <AuthGuard required={true}>
+          <Favorites/>
+        </AuthGuard>
+      )
     },
   ]);
 
@@ -80,13 +99,21 @@ function App() {
     <>
       <RouterProvider router={router} />
 
+      {/*  Toast container added ONCE */}
       <ToastContainer
         position="top-right"
         autoClose={1000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick={false}
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
         theme="light"
       />
     </>
   );
 }
 
-export default App;
+export default App

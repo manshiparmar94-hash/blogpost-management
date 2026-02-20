@@ -1,5 +1,5 @@
 import { FaBlog, FaChartBar, FaHome, FaPlusSquare, FaSignOutAlt,
-  FaMoon, FaSun} from "react-icons/fa";
+  FaMoon, FaSun,FaStar} from "react-icons/fa";
 import { NavLink, useNavigate } from "react-router-dom";
 import "./Navbar.css";
 import { useTheme } from "../context/ThemeContext";
@@ -42,7 +42,14 @@ const Navbar = () => {
             <FaChartBar className="nav-icon" />
             Analytics
           </NavLink>
+
+          <NavLink to="/Favorites" className="nav-item">
+            <FaStar className="nav-icon" />
+            Favorites
+          </NavLink>
         </div>
+
+        
 
         {/* Right Side */}
         <div className="navbar-actions">
